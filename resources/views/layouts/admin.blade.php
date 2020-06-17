@@ -29,19 +29,23 @@
   <link href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,400i,700" rel="stylesheet">
   <!-- <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/jqueryui/1.12.1/jquery-ui.min.js"></script> -->
-
+  {{-- <script src="https://cdn.datatables.net/1.10.21/css/jquery.dataTables.min.css"></script> --}}
+  {{-- <script src="https://cdn.datatables.net/buttons/1.6.2/css/buttons.dataTables.min.css"></script> --}}
   <!-- jQuery -->
   <script src="{{ asset('plugins/jquery/jquery.min.js') }}"></script>
   <!-- jQuery UI 1.11.4 -->
   <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
-  
-<script src="{{ asset('plugins/sparklines/sparkline.js') }}"></script>
-<script src="{{ asset('plugins/jquery-ui/jquery-ui.min.js') }}"></script>
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/switchery/0.8.2/switchery.min.css">
-<script src="https://cdnjs.cloudflare.com/ajax/libs/switchery/0.8.2/switchery.min.js"></script>
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.css">
-<script src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.js"></script>
+  {{-- <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css"></script> --}}
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-3-typeahead/4.0.2/bootstrap3-typeahead.min.js"></script>
 
+  <script src="{{ asset('plugins/sparklines/sparkline.js') }}"></script>
+  <script src="{{ asset('plugins/jquery-ui/jquery-ui.min.js') }}"></script>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/switchery/0.8.2/switchery.min.css">
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/switchery/0.8.2/switchery.min.js"></script>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.css">
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/croppie/2.6.4/croppie.js"></script>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/croppie/2.6.4/croppie.css" />
 </head>
 
 <body class="hold-transition sidebar-mini layout-fixed">
@@ -58,12 +62,21 @@
           <a href="{{ route('admin.home') }}" class="nav-link">Home</a>
         </li>
         <li class="nav-item d-none d-sm-inline-block">
-          <a href="#" class="nav-link">Contact</a>
+          <a href="{{ route('imageindex')}}" class="nav-link thumbline">Single Image</a>
+        </li>
+        <li class="nav-item d-none d-sm-inline-block">
+          <a href="{{ route('imageuploadajax')}}" class="nav-link">Ajax Image</a>
+        </li>
+        <li class="nav-item d-none d-sm-inline-block">
+          <a href="{{ route('cropimage')}}" class="nav-link">Crop Image</a>
+        </li>
+        <li class="nav-item d-none d-sm-inline-block">
+          <a href="{{ route('index')}}" class="nav-link">Album</a>
         </li>
       </ul>
 
       <!-- SEARCH FORM -->
-     <!--  <form class="form-inline ml-3">
+      <!--  <form class="form-inline ml-3">
         <div class="input-group input-group-sm">
           <input class="form-control form-control-navbar" type="search" placeholder="Search" aria-label="Search">
           <div class="input-group-append">
@@ -85,9 +98,9 @@
         <!-- Notifications Dropdown Menu -->
         <li class="nav-item dropdown">
           <a class="nav-link" data-toggle="dropdown" href="#">
-              <img alt="{{Auth::user()->name}}" class="rounded-circle img-thumbnail img-fluid" style="margin-bottom:50px;position: relative;
-    top: -10px;" width="40px" src="{{Auth::user()->image}}"/>
-            
+            <img alt="{{Auth::user()->name}}" class="rounded-circle img-thumbnail img-fluid" style="margin-bottom:50px;position: relative;
+    top: -10px;" width="40px" src="{{Auth::user()->image}}" />
+
           </a>
           <div class="dropdown-menu dropdown-menu-lg dropdown-menu-right">
             <span class="dropdown-item dropdown-header">User Info</span>
@@ -148,7 +161,7 @@
               active
               @endif
               ">
-              
+
                 <i class="nav-icon fas fa-tachometer-alt"></i>
                 <p>
                   Dashboard
@@ -168,40 +181,40 @@
             </li>
 
             <li class="nav-item">
-                <a href="{{route('admin.news.index')}}" class="nav-link @if($segment=='news') active
+              <a href="{{route('admin.news.index')}}" class="nav-link @if($segment=='news') active
                   @endif">
-                  <i class="far fa-newspaper nav-icon"></i>
-                  <p>
-                    News
-                    <!-- for new icon -->
-                    <!-- <span class="right badge badge-danger">New</span> -->
-                  </p>
-                </a>
-              </li>
+                <i class="far fa-newspaper nav-icon"></i>
+                <p>
+                  News
+                  <!-- for new icon -->
+                  <!-- <span class="right badge badge-danger">New</span> -->
+                </p>
+              </a>
+            </li>
             <li class="nav-item">
-                <a href="{{url('change_password')}}" class="nav-link @if($segment=='change_password') active
+              <a href="{{url('change_password')}}" class="nav-link @if($segment=='change_password') active
                   @endif">
-                  <i class="fa fa-lock nav-icon"></i>
-                  <p>
-                    Change Password
-                    <!-- for new icon -->
-                    <!-- <span class="right badge badge-danger">New</span> -->
-                  </p>
-                </a>
-              </li>
+                <i class="fa fa-lock nav-icon"></i>
+                <p>
+                  Change Password
+                  <!-- for new icon -->
+                  <!-- <span class="right badge badge-danger">New</span> -->
+                </p>
+              </a>
+            </li>
 
             <li class="nav-item">
-                <a href="{{ url('user') }}" class="nav-link @if($segment=='users') active 
+              <a href="{{ url('user') }}" class="nav-link @if($segment=='users') active 
                   @endif">
-                  <i class="far fa-user nav-icon"></i>
-                  <p>
-                    Users
-                    <!-- for new icon -->
-                    <!-- <span class="right badge badge-danger">New</span> -->
-                  </p>
-                </a>
-              </li>
-              
+                <i class="far fa-user nav-icon"></i>
+                <p>
+                  Users
+                  <!-- for new icon -->
+                  <!-- <span class="right badge badge-danger">New</span> -->
+                </p>
+              </a>
+            </li>
+
             <li class="nav-header">LABELS</li>
             <li class="nav-item">
               <a class="nav-link" href="{{ route('logout') }}" onclick="event.preventDefault();
@@ -255,9 +268,9 @@
   <!-- Bootstrap 4 -->
   <script src="{{ asset('plugins/bootstrap/js/bootstrap.bundle.min.js') }}"></script>
   <!-- ChartJS -->
-   <script src="{{ asset('plugins/chart.js/Chart.min.js') }}"></script> 
+  <script src="{{ asset('plugins/chart.js/Chart.min.js') }}"></script>
   <!-- Sparkline -->
-  
+
   <!-- JQVMap -->
   <script src="{{ asset('plugins/jqvmap/jquery.vmap.min.js') }}"></script>
   <script src="{{ asset('plugins/jqvmap/maps/jquery.vmap.usa.js') }}"></script>

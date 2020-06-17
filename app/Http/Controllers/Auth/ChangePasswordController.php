@@ -6,6 +6,8 @@ use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Http\Request;
 use Hash;
+use Illuminate\Support\Facades\Hash as FacadesHash;
+use Illuminate\Support\Facades\Log as FacadesLog;
 use Validator;
 use Log;
 
@@ -17,7 +19,7 @@ class ChangePasswordController extends Controller
     }
 
     //redirect path
-    protected $redirectTo = '/change_password';
+    protected $redirectTo = '/admin';
     
 
     public function showChangePasswordForm()
@@ -28,13 +30,13 @@ class ChangePasswordController extends Controller
    
     public function changePassword(Request $request)
     {
-        ddd($user);
+        // ddd($user);
         $user = Auth::getUser();
 
         $check = $this->validation_check($request->all())->validate();
        
-        Log::Debug($user);
-        if (Hash::check($request->get('current_password'), $user->password)) {
+        FacadesLog::Debug($user);
+        if (FacadesHash::check($request->get('current_password'), $user->password)) {
             $user->password = $request->get('new_password');
             $user->save();
             return redirect($this->redirectTo)->withMessage('Password changed successfully!');

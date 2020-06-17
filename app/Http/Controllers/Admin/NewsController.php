@@ -5,7 +5,10 @@ namespace App\Http\Controllers\Admin;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use App\Category;
+use App\Exports\NewsExport;
 use App\News;
+use Maatwebsite\Excel\Facades\Excel;
+
 
 class NewsController extends Controller
 {
@@ -17,8 +20,16 @@ class NewsController extends Controller
      */
     public function index(Request $id)
     {
-        $arr['news'] = News::paginate(2);
-        return view('admin.news.index')->with($arr);
+        if (request()->has('category_id')) {
+            $news = News::where('category_id', request('category_id'))
+                ->paginate(5)->appends('category_id', request('category_id'));
+        } else {
+            // $categories = Category::all()->sortByDESC('id');
+            $news = News::paginate(2);
+        }
+
+        // $arr['news'] = News::paginate(2);
+        return view('admin.news.index', compact('news'));
     }
     /**
      * Show the form for creating a new resource.
@@ -37,15 +48,17 @@ class NewsController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request,News $news)
+    public function store(Request $request, News $news)
     {
-        if($request->image->getClientOriginalName()){
+        if ($request->image->getClientOriginalName()) {
             $ext =  $request->image->getClientOriginalExtension();
-            $file = date('YmdHis').rand(1,99999).'.'.$ext;
-            $request->image->storeAs('public/news',$file);
-        }
-        else
-        {
+            $file = date('YmdHis') . rand(1, 99999) . '.' . $ext;
+            $request->image->move(public_path('news'),$file);
+            return back()->with('success','Image Upload successfully')->with('path',$file);
+
+
+            // $request->image->storeAs('public/news', $file);
+        } else {
             $file = '';
         }
         $news->category_id = $request->category_id;
@@ -90,14 +103,12 @@ class NewsController extends Controller
      */
     public function update(Request $request, News $news)
     {
-        if(isset($request->image) && $request->image->getClientOriginalName()){
+        if (isset($request->image) && $request->image->getClientOriginalName()) {
             $ext =  $request->image->getClientOriginalExtension();
-            $file = date('YmdHis').rand(1,99999).'.'.$ext;
-            $request->image->storeAs('public/news',$file);
-        }
-        else
-        {
-            if(!$news->image)
+            $file = date('YmdHis') . rand(1, 99999) . '.' . $ext;
+            $request->image->storeAs('public/news', $file);
+        } else {
+            if (!$news->image)
                 $file = '';
             else
                 $file = $news->image;
@@ -122,4 +133,36 @@ class NewsController extends Controller
         $news->delete();
         return redirect()->route('admin.news.index');
     }
+    public function result(Request  $request)
+    {
+        $datas = News::select("title")
+            ->where("title", "LIKE", "%{$request->input('query')}%")
+            ->get();
+        $dataModified = array();
+        foreach ($datas as $data) {
+            $dataModified[] = $data->title;
+        }
+        return response()->json($dataModified);
+    }
+
+    public function export() 
+    {
+        return Excel::download(new NewsExport, 'News.xlsx');
+    }
+    
+    public function exportcsv() 
+    {
+        if (\Gate::allows('isAdmin')) {
+            return Excel::download(new NewsExport, 'News.csv');
+            // echo 'Admin user role is allowed';
+        } else {
+            echo 'Admin are not allowed not allowed';
+            
+        }
+        
+    }   
+    // public function exportpdf() 
+    // {
+    //     return Excel::download(new NewsExport, 'News.pdf');
+    // }   
 }

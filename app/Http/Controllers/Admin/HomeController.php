@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\admin;
 
 use App\Http\Controllers\Controller;
+use App\User;
 use Illuminate\Http\Request;
 
 class HomeController extends Controller
@@ -20,7 +21,9 @@ class HomeController extends Controller
      */
     public function index()
     {
-        return view('content');
+        $users = User::count();
+        // dd($users_count);
+        return view('content',['users'=>$users]);
         // echo "hii";
     }
     public function showUser()
