@@ -48,6 +48,8 @@ Route::prefix('admin')->as('admin.')->namespace('admin')->middleware('auth')->gr
 	Route::post('/search', 'CategoriesController@search')->name('searchoption');
 	Route::resource('/categories', 'CategoriesController');
 	Route::resource('/news', 'NewsController');
+
+	//datatables
 	Route::resource('/books','BookController');
 
 });
