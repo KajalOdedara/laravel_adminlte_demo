@@ -138,7 +138,11 @@ return [
 
         /*
          * Laravel Framework Service Providers...
+         *
          */
+
+        Yajra\Datatables\DatatablesServiceProvider::class,
+        // Yajra\Datatables\ButtonsServiceProvider::class,
         Collective\Html\HtmlServiceProvider::class,
         Maatwebsite\Excel\ExcelServiceProvider::class,
         Laravel\Socialite\SocialiteServiceProvider::class,
@@ -232,6 +236,8 @@ return [
         'URL' => Illuminate\Support\Facades\URL::class,
         'Validator' => Illuminate\Support\Facades\Validator::class,
         'View' => Illuminate\Support\Facades\View::class,
+        'Datatables' => Yajra\Datatables\Facades\Datatables::class,
+
 
     ],
 

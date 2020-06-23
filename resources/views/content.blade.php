@@ -1,6 +1,32 @@
 @extends('layouts.admin')
 
 @section('content')
+<style>
+  .closebtn {
+    margin-left: 15px;
+    color: white;
+    font-weight: bold;
+    float: right;
+    font-size: 22px;
+    line-height: 20px;
+    cursor: pointer;
+    transition: 0.3s;
+  }
+
+  .closebtn:hover {
+    color: rgb(196, 9, 9);
+  }
+</style>
+
+<div class="col-md-12">
+  @if(session('login-success'))
+  <div class="alert alert-success" role="alert">
+    <span class="closebtn" onclick="this.parentElement.style.display='none';">&times;</span>
+    {{ session('login-success') }}
+  </div>
+  @endif
+</div>
+
 <!-- Content Header (Page header) -->
 <div class="content-header">
   <div class="container-fluid">
@@ -34,7 +60,7 @@
           <div class="icon">
             <i class="ion ion-person-add"></i>
           </div>
-        <a href="{{route("user")}}" class="small-box-footer">More info <i class="fa fa-arrow-circle-right"></i></a>
+          <a href="{{route("user")}}" class="small-box-footer">More info <i class="fa fa-arrow-circle-right"></i></a>
         </div>
       </div>
       <!-- ./col -->
@@ -42,14 +68,14 @@
         <!-- small box -->
         <div class="small-box bg-info">
           <div class="inner">
-            <h3>150</h3>
+            <h3>{{ $ActiveUserCounts }}</h3>
 
             <p>Active user</p>
           </div>
           <div class="icon">
             <i class="ion ion-bag"></i>
           </div>
-        <a href="{{ route('user') }}" class="small-box-footer">More info <i class="fa fa-arrow-circle-right"></i></a>
+          <a href="{{ route('user') }}" class="small-box-footer">More info <i class="fa fa-arrow-circle-right"></i></a>
         </div>
       </div>
       <!-- ./col -->
@@ -57,7 +83,7 @@
         <!-- small box -->
         <div class="small-box bg-warning">
           <div class="inner">
-            <h3>53<sup style="font-size: 20px">%</sup></h3>
+            <h3>65<sup style="font-size: 20px">%</sup></h3>
 
             <p>Bounce Rate</p>
           </div>
@@ -68,7 +94,7 @@
         </div>
       </div>
       <!-- ./col -->
-      
+
       <div class="col-lg-3 col-6">
         <!-- small box -->
         <div class="small-box bg-danger">
@@ -88,8 +114,57 @@
     <!-- /.row -->
     <!-- Main row -->
 
+    <div class="card">
+      <div class="card-header d-flex p-0">
+        <h3 class="card-title p-3">
+          <i class="fa fa-pie-chart mr-1"></i>
+        <strong><h3>Add Customer</h3></strong>
+        </h3>
+      </div>
+      <div id="alert_box" class="alert alert-success" style="display:none"></div>
+    <div class="col-md-8">
+      <form id="myForm">
+        <div class="form-group">
+          <label for="name">Name:</label>
+          <input type="text" class="form-control" id="name">
+        </div>
+        <div class="form-group">
+          <label for="email">Email:</label>
+          <input type="email" class="form-control" id="email">
+        </div>
+        <button class="btn btn-success float-right btn-lg" id="ajaxSubmit">Add</button>
 
+      </form>
+    </div>
+    <div class="clearfix"></div>
 
+    </div>
+      <script>
+        $(function() {
+            $.click(function (e) {
+                e.preventDefault();
+                $.ajaxSetup({
+                    headers: {
+                        'X-CSRF-TOKEN': $('meta[name="_token"]').attr('content')
+                    }
+                });
+                $.ajax({
+                    url: "{{ url('/store_customer') }}",
+                    method: 'POST',
+                    data: {
+                        name: $('#name').val(),
+                        email: $('#email').val(),
+                    },
+                    success: function (data) {
+                      console.log(data);
+                        // $('#alert_box').html(result.message);
+                        // $('#alert_box').show();
+                    }
+                });
+            });
+        });
+    </script>
+    
     <div class="row">
       <!-- Left col -->
       <section class="col-lg-7 connectedSortable">

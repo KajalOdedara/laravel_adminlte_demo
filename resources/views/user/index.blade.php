@@ -23,7 +23,7 @@
   <div class="content">
     <div class="container-fluid">
       <div class="row justify-content-center">
-       
+
         <form action="/search" method="POST" role="search">
           {{ csrf_field() }}
           <div class="input-group" style="float: right">
@@ -36,31 +36,31 @@
         </form>
         <div class="container">
           @if(isset($details))
-              <p> The Search results for your query <b> {{ $query }} </b> are :</p>
+          <p> The Search results for your query <b> {{ $query }} </b> are :</p>
           <h2>Sample User details</h2>
           <table class="table table-striped">
-              <thead>
-                  <tr>
-                      <th>Name</th>
-                      <th>Email</th>
-                  </tr>
-              </thead>
-              <tbody>
-                  @foreach($details as $user)
-                  <tr>
-                      <td>{{$user->name}}</td>
-                      <td>{{$user->email}}</td>
-                  </tr>
-                  @endforeach
-              </tbody>
+            <thead>
+              <tr>
+                <th>Name</th>
+                <th>Email</th>
+              </tr>
+            </thead>
+            <tbody>
+              @foreach($details as $user)
+              <tr>
+                <td>{{$user->name}}</td>
+                <td>{{$user->email}}</td>
+              </tr>
+              @endforeach
+            </tbody>
           </table>
           @endif
-      </div>
+        </div>
         <div class="col-md-12">
 
           <div class="card">
             <div class="card-header">Users List</div>
-          
+
             <div class="card-body">
               <table class="container-fluid table table-striped table-bordered">
                 <thead>
@@ -68,7 +68,9 @@
                     <th scope="col">id</th>
                     <th scope="col">Name</th>
                     <th scope="col">Email</th>
+                    <th scope="col">online/offline</th>
                     <th scope="col">Status</th>
+                    <th scope="col">Last Seen at:</th>
                     <th scope="col">Created</th>
                   </tr>
                 </thead>
@@ -79,9 +81,21 @@
                     <td>{{ $user->name }}</td>
                     <td>{{ $user->email }}</td>
                     <td>
+                    @if($user->isOnline())
+                    <li class="text-success">
+                      online
+                    </li>
+                    @else
+                    <li class="text-danger">
+                      offline
+                    </li>
+                    @endif
+                    </td>
+                    <td>
                       <input type="checkbox" data-id="{{ $user->id }}" name="status" class="js-switch"
                         {{ $user->status == 1 ? 'checked' : '' }}>
                     </td>
+                    <td>{{ \Carbon\Carbon::parse($user->last_seen)->diffForHumans() }}</td> 
                     <td>{{ $user->created_at->diffForHumans() }}</td>
                   </tr>
                   @endforeach

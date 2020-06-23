@@ -29,17 +29,17 @@
   <link href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,400i,700" rel="stylesheet">
   <!-- <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/jqueryui/1.12.1/jquery-ui.min.js"></script> -->
-  {{-- <script src="https://cdn.datatables.net/1.10.21/css/jquery.dataTables.min.css"></script> --}}
-  {{-- <script src="https://cdn.datatables.net/buttons/1.6.2/css/buttons.dataTables.min.css"></script> --}}
+
   <!-- jQuery -->
   <script src="{{ asset('plugins/jquery/jquery.min.js') }}"></script>
+  <script src="{{ asset('plugins/jquery-ui/jquery-ui.min.js') }}"></script>
+
   <!-- jQuery UI 1.11.4 -->
   <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
   {{-- <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css"></script> --}}
   <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-3-typeahead/4.0.2/bootstrap3-typeahead.min.js"></script>
 
   <script src="{{ asset('plugins/sparklines/sparkline.js') }}"></script>
-  <script src="{{ asset('plugins/jquery-ui/jquery-ui.min.js') }}"></script>
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/switchery/0.8.2/switchery.min.css">
   <script src="https://cdnjs.cloudflare.com/ajax/libs/switchery/0.8.2/switchery.min.js"></script>
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.css">
@@ -92,6 +92,15 @@
         <!-- Messages Dropdown Menu -->
         <li class="nav-item dropdown">
           <a class="nav-link" data-toggle="dropdown" href="#">
+            {{-- @if($users->isOnline())
+                  <li class="text-success">
+                    online
+                  </li>
+            @else
+            <li class="text-success">
+              ofline
+            </li>
+            @endif --}}
             <i class="far fa-user"> {{Auth::user()->name}} </i>
           </a>
         </li>
@@ -186,6 +195,17 @@
                 <i class="far fa-newspaper nav-icon"></i>
                 <p>
                   News
+                  <!-- for new icon -->
+                  <!-- <span class="right badge badge-danger">New</span> -->
+                </p>
+              </a>
+            </li>
+            <li class="nav-item">
+              <a href="{{route('admin.books.index')}}" class="nav-link @if($segment=='books') active
+                  @endif">
+                <i class="fa fa-book nav-icon"></i>
+                <p>
+                  Book
                   <!-- for new icon -->
                   <!-- <span class="right badge badge-danger">New</span> -->
                 </p>
@@ -291,6 +311,10 @@
   <script src="{{ asset('dist/js/pages/dashboard.js') }}"></script>
   <!-- AdminLTE for demo purposes -->
   <script src="{{ asset('dist/js/demo.js') }}"></script>
+  <script src="https://cdn.datatables.net/1.10.21/css/jquery.dataTables.min.css"></script>
+  <script src="https://cdn.datatables.net/1.10.21/js/jquery.dataTables.min.js"></script>
+  <script src="https://cdn.datatables.net/buttons/1.6.2/css/buttons.dataTables.min.css"></script>
+  <script src="https://cdn.datatables.net/1.10.19/js/dataTables.bootstrap4.min.js"></script>
 </body>
 
 </html>

@@ -22,11 +22,10 @@ Route::get('/', function () {
 	return view('welcome');
 });
 
-Auth::routes();
+Auth::routes(['verify' => true]);
 
 Route::middleware('can:isAdmin')->group(function () {
 	Route::get('/news', 'Admin\NewsController@export')->name('exportexcel');
-	
 });
 
 // category resource route
@@ -39,11 +38,18 @@ Route::get('/newscsv', 'Admin\NewsController@exportcsv')->name('exportcsv');
 Route::get('categorysearch', 'Admin\CategoriesController@result');
 Route::get('search', 'Admin\NewsController@result');
 
-Route::prefix('admin')->as('admin.')->namespace('admin')->middleware('auth')->group(function () {
+//verifying mail 
+Route::prefix('admin')->as('admin.')->namespace('admin')->group(function () {
 	Route::get('/', 'HomeController@index')->name('home');
+	Route::post('store_customer', 'CustomerController@store');
+});
+
+Route::prefix('admin')->as('admin.')->namespace('admin')->middleware('auth')->group(function () {
 	Route::post('/search', 'CategoriesController@search')->name('searchoption');
 	Route::resource('/categories', 'CategoriesController');
 	Route::resource('/news', 'NewsController');
+	Route::resource('/books','BookController');
+
 });
 
 // social login

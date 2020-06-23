@@ -13,22 +13,28 @@ class HomeController extends Controller
      *
      * @return void
      */
-   
+
     /**
      * Show the application dashboard.
      *
      * @return \Illuminate\Contracts\Support\Renderable
      */
+    public function __construct()
+    {
+        $this->middleware(['auth','verified']);
+    }
+  
     public function index()
     {
         $users = User::count();
-        // dd($users_count);
-        return view('content',['users'=>$users]);
-        // echo "hii";
+        $count = User::where('status', '=', 1)->count();
+        // dd($count);
+        return view('content', ['users' => $users, 'ActiveUserCounts' => $count]);
     }
-    public function showUser()
-    {
-        $demouser = User::get();
-        return view('content',compact('demouser'));
-    }
+
+    // public function showUser()
+    // {
+    //     $demouser = User::get();
+    //     return view('content', compact('demouser'));
+    // }
 }
