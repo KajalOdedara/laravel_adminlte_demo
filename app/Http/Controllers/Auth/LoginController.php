@@ -26,6 +26,8 @@ class LoginController extends Controller
      *
      * @var string
      */
+    protected $maxAttempts = 1; // Default is 5
+    protected $decayMinutes = 1; // Default is 1
     protected $redirectTo = '/admin';
 
     /**

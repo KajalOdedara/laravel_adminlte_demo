@@ -5,7 +5,8 @@ namespace App\Http\Controllers\admin;
 use App\Book;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
-use DataTables;
+use Illuminate\Support\Facades\Log;
+use Yajra\DataTables\DataTables;
 
 class BookController extends Controller
 {
@@ -16,23 +17,21 @@ class BookController extends Controller
      */
     public function index(Request $request)
     {
+        // Log::debug('index method');
         $books = Book::latest()->get();
 
+
         if ($request->ajax()) {
-            return DataTables::of($books)
-                ->addIndexColumn()
-                ->addColumn('action', function ($row) {
+            return DataTables::of($books)->addIndexColumn()->addColumn('action', function ($row) {
 
-                    $btn = 'Edit';
+                $btn = '<a href="javascript:void(0)" data-toggle="tooltip"  data-id="' . $row->id . '" data-original-title="Edit" class="edit btn btn-primary btn-sm editBook">Edit</a>';
 
-                    $btn = $btn . ' Delete';
+                $btn = $btn . ' <a href="javascript:void(0)" data-toggle="tooltip"  data-id="' . $row->id . '" data-original-title="Delete" class="btn btn-danger btn-sm deleteBook">Delete</a>';
 
-                    return $btn;
-                })
-                ->rawColumns(['action'])
-                ->make(true);
+                return $btn;
+
+            })->rawColumns(['action'])->make(true);
         }
-
         return view('admin.books.index', compact('books'));
     }
 
@@ -45,9 +44,10 @@ class BookController extends Controller
      */
     public function store(Request $request)
     {
-        Book::updateOrCreate([
-            'id' => $request->book_id
-        ],[
+        Log::debug('store method');
+
+        Book::updateOrCreate(['id' => $request->book_id],
+         [
             'name' => $request->name,
             'author' => $request->author
         ]);
@@ -68,6 +68,8 @@ class BookController extends Controller
      */
     public function edit($id)
     {
+        Log::debug('edit method');
+
         $book = Book::find($id);
         return response()->json($book);
     }
@@ -80,6 +82,8 @@ class BookController extends Controller
      */
     public function destroy(Book $book)
     {
+        Log::debug('delete method');
+
         $book->delete();
 
         // return response

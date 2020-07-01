@@ -1,73 +1,93 @@
-<!DOCTYPE html>
-<html>
-<head>
-    <title>Ajax CRUD with DataTables</title>
-    <meta name="csrf-token" content="{{ csrf_token() }}">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.1.3/css/bootstrap.min.css"/>
+@extends('layouts.admin')
+@section('content')
+    
+
+    <meta name="csrf-token" content="{{ csrf_token() }}"> 
+    <link rel="stylesheet"
+        href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.1.3/css/bootstrap.min.css" />
     <link href="https://cdn.datatables.net/1.10.20/css/dataTables.bootstrap4.min.css" rel="stylesheet">
     <link href="https://cdn.datatables.net/1.10.16/css/jquery.dataTables.min.css" rel="stylesheet">
+
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.js"></script>
     <script src="https://cdn.datatables.net/1.10.16/js/jquery.dataTables.min.js"></script>
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/js/bootstrap.min.js"></script>
     <script src="https://cdn.datatables.net/1.10.19/js/dataTables.bootstrap4.min.js"></script>
-</head>
-<body>
-<div class="container">
-    
-    <div class="container-fluid">
-        <div class="row">
-            <h4 class="one">Books</h4>
-            <button class="btn btn-info ml-auto" id="createNewBook">Create Book</button>
-        </div>
-    </div>
-    <br>
-    <table id="dataTable" class="table table-striped table-bordered">
-        <thead>
-        <tr>
-            <th>#</th>
-            <th>Name</th>
-            <th>Author</th>
-            <th width="280px">Action</th>
-        </tr>
-        </thead>
-        <tbody>
-        </tbody>
-    </table>
-</div>
 
-{{-- create/update book modal--}}
-<div class="modal fade" id="ajaxModel" aria-hidden="true">
-    <div class="modal-dialog">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h4 class="modal-title" id="modelHeading"></h4>
+    {{-- <link rel="stylesheet" href="https://cdn.datatables.net/buttons/1.0.3/css/buttons.dataTables.min.css">
+    <script src="https://cdn.datatables.net/buttons/1.0.3/js/dataTables.buttons.min.js"></script>
+    <script src="/vendor/datatables/buttons.server-side.js"></script> --}}
+    
+
+<body>
+    <div class="container">
+        <div class="content-header">
+            <div class="container-fluid">
+              <div class="row mb-2">
+                <div class="col-sm-6">
+                  <h1 class="m-0 text-dark">Book</h1>
+                </div><!-- /.col -->
+                <div class="col-sm-6">
+                  <ol class="breadcrumb float-sm-right">
+                    <li class="breadcrumb-item"><a href="{{ route('admin.home') }}">Dashboard</a></li>
+                    <li class="breadcrumb-item active"> Book</li>
+                  </ol>
+                </div><!-- /.col -->
+              </div><!-- /.row -->
+            </div><!-- /.container-fluid -->
+          </div>
+        <div class="container-fluid">
+            <div class="row">
+                <button class="btn btn-info ml-auto" id="createNewBook" style="margin: 30px;">Create Book</button>
             </div>
-            <div class="modal-body">
-                <form id="bookForm" name="bookForm" class="form-horizontal">
-                    <input type="hidden" name="book_id" id="book_id">
-                    <div class="form-group">
-                        <label for="name" class="col-sm-2 control-label">Name</label>
-                        <div class="col-sm-12">
-                            <input type="text" class="form-control" id="name" name="name" placeholder="Enter name"
-                                   value="" maxlength="50" required="" autocomplete="off">
+        </div>
+        <br>
+        <table id="dataTable" class="table table-striped table-bordered">
+            <thead>
+                <tr>
+                    <th>#</th>
+                    <th>Name</th>
+                    <th>Author</th>
+                    <th width="280px">Action</th>
+                </tr>
+            </thead>
+            <tbody>
+            </tbody>
+        </table>
+    </div>
+
+    {{-- create/update book modal--}}
+    <div class="modal fade" id="ajaxModel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h4 class="modal-title" id="modelHeading"></h4>
+                </div>
+                <div class="modal-body">
+                    <form id="bookForm" name="bookForm" class="form-horizontal">
+                        <input type="hidden" name="book_id" id="book_id">
+                        <div class="form-group">
+                            <label for="name" class="col-sm-2 control-label">Name</label>
+                            <div class="col-sm-12">
+                                <input type="text" class="form-control" id="name" name="name" placeholder="Enter name"
+                                    value="" maxlength="50" required="" autocomplete="off">
+                            </div>
                         </div>
-                    </div>
-                    <div class="form-group">
-                        <label class="col-sm-2 control-label">Author</label>
-                        <div class="col-sm-12">
-                            <input type="text" class="form-control" id="author" name="author"
-                                   placeholder="Enter author name"
-                                   value="" maxlength="50" required="" autocomplete="off">
+                        <div class="form-group">
+                            <label class="col-sm-2 control-label">Author</label>
+                            <div class="col-sm-12">
+                                <input type="text" class="form-control" id="author" name="author"
+                                    placeholder="Enter author name" value="" maxlength="50" required=""
+                                    autocomplete="off">
+                            </div>
                         </div>
-                    </div>
-                    <div class="col-sm-offset-2 col-sm-10">
-                        <button type="submit" class="btn btn-primary" id="saveBtn">Save</button>
-                    </div>
-                </form>
+                        <div class="col-sm-offset-2 col-sm-10">
+                            <button type="submit" class="btn btn-primary" id="saveBtn">Save</button>
+                        </div>
+                    </form>
+                </div>
             </div>
         </div>
     </div>
-</div>
 
 </body>
 
@@ -84,7 +104,7 @@
         var table = $('#dataTable').DataTable({
             processing: true,
             serverSide: true,
-            ajax: "{{ url('books') }}",
+            ajax: "{{ route('admin.books.index') }}",
             columns: [
                 {data: 'DT_RowIndex', name: 'DT_RowIndex'},
                 {data: 'name', name: 'name'},
@@ -109,7 +129,7 @@
 
             $.ajax({
                 data: $('#bookForm').serialize(),
-                url: "{{ url('books') }}",
+                url: "{{ route('admin.books.index') }}",
                 type: "POST",
                 dataType: 'json',
                 success: function (data) {
@@ -128,7 +148,7 @@
         // edit book
         $('body').on('click', '.editBook', function () {
             var book_id = $(this).data('id');
-            $.get("{{ url('books') }}" + '/' + book_id + '/edit', function (data) {
+            $.get("{{ route('admin.books.index') }}" + '/' + book_id + '/edit', function (data) {
                 $('#modelHeading').html("Edit Book");
                 $('#saveBtn').html('Update');
                 $('#ajaxModel').modal('show');
@@ -145,7 +165,7 @@
 
             $.ajax({
                 type: "DELETE",
-                url: "{{ url('books') }}" + '/' + book_id,
+                url: "{{ route('admin.books.index') }}" + '/' + book_id,
                 success: function (data) {
                     table.draw();
                 },
@@ -157,4 +177,4 @@
 
     });
 </script>
-</html>
+@endsection

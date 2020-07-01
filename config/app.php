@@ -140,9 +140,9 @@ return [
          * Laravel Framework Service Providers...
          *
          */
-
+        Anhskohbo\NoCaptcha\NoCaptchaServiceProvider::class,
         Yajra\Datatables\DatatablesServiceProvider::class,
-        // Yajra\Datatables\ButtonsServiceProvider::class,
+        Yajra\Datatables\ButtonsServiceProvider::class,
         Collective\Html\HtmlServiceProvider::class,
         Maatwebsite\Excel\ExcelServiceProvider::class,
         Laravel\Socialite\SocialiteServiceProvider::class,
@@ -196,6 +196,7 @@ return [
     */
 
     'aliases' => [
+        'NoCaptcha' => Anhskohbo\NoCaptcha\Facades\NoCaptcha::class,
         'Form' => Collective\Html\FormFacade::class,
         'Html' => Collective\Html\HtmlFacade::class,
         'Excel' => Maatwebsite\Excel\Facades\Excel::class,
